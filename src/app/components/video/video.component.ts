@@ -1,18 +1,18 @@
 import { Component, AfterViewInit, Input, Injector, OnDestroy } from '@angular/core';
-
 import { WINDOW_PROVIDERS, WINDOW } from '../../util/window.service';
 import { PollForGlobalUtil } from '../../util/poll-for-global.service';
 
 import { DynamicScriptLoaderService } from '../../services/dynamic-script-loader-service.service';
 import { Subject, Subscription } from 'rxjs';
 
-@Component({
-  selector: 'app-image',
-  templateUrl: './image.component.html',
-  styleUrls: ['./image.component.scss']
-})
+declare const s7viewers: any;
 
-export class ImageComponent implements AfterViewInit, OnDestroy {
+@Component({
+  selector: 'app-video',
+  templateUrl: './video.component.html',
+  styleUrls: ['./video.component.scss']
+})
+export class VideoComponent implements AfterViewInit, OnDestroy {
 
   public window: Window;
   private pollForGlobal: Subject<string>;
@@ -27,11 +27,10 @@ export class ImageComponent implements AfterViewInit, OnDestroy {
   }
 
   @Input() path: string;
-  @Input() imgId: string;
-  @Input() dataMode: string;
+  @Input() containerId: string;
 
   ngAfterViewInit() {
-    this.pollForGlobal = this.pollForGlobalUtil.pollForGlobal('s7responsiveImage');
+    this.pollForGlobal = this.pollForGlobalUtil.pollForGlobal('s7viewers');
     this.pollForGlobalSubscription = this.pollForGlobal.subscribe(value =>
       this.onPollForGlobalResponse(value)
     );
@@ -45,23 +44,31 @@ export class ImageComponent implements AfterViewInit, OnDestroy {
     if (val !== 'loaded') {
       this.loadScripts();
     } else if (val === 'loaded') {
-      this.callS7ResponsiveImage();
-      this.pollForGlobalSubscription.unsubscribe();
+      this.callS7VideoViewer();
     }
   }
 
   loadScripts() {
     this.dynamicScriptLoader
-      .load('responsive-image')
-      .then(data => {
-        if (typeof this.window['s7responsiveImage'] === 'function') {
-          this.callS7ResponsiveImage();
+      .load('video-viewer')
+      .then(() => {
+        if (typeof this.window['s7viewers'] !== 'undefined') {
+          this.callS7VideoViewer();
         }
       })
       .catch(error => console.log(error));
   }
 
-  callS7ResponsiveImage() {
-    this.window['s7responsiveImage'](document.getElementById(this.imgId));
+  callS7VideoViewer() {
+    console.log('called');
+    new s7viewers.VideoViewer({
+      containerId: this.containerId,
+      params: {
+        asset: this.path,
+        serverurl: 'http://tmobile-dev.scene7.com/is/image/',
+        videoserverurl: 'http://tmobile-dev.scene7.com/is/content/'
+      }
+    }).init();
+    this.pollForGlobalSubscription.unsubscribe();
   }
 }

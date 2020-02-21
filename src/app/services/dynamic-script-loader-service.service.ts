@@ -10,15 +10,15 @@ interface Scripts {
 export const ScriptStore: Scripts[] = [
   {
     name: 'responsive-image',
-    src: 'https://s7d9.scene7.com/s7viewers/libs/responsive_image.js'
+    src: 'http://tmobile-dev.scene7.com/s7viewers/libs/responsive_image.js'
   },
   {
-    name: 's7init',
-    src: '../assets/s7init.js'
+    name: 'video-viewer',
+    src: 'http://tmobile-dev.scene7.com/s7viewers/html5/js/VideoViewer.js'
   }
 ];
 
-declare var document: any;
+declare const document: any;
 
 @Injectable()
 export class DynamicScriptLoaderService {
@@ -51,9 +51,9 @@ export class DynamicScriptLoaderService {
       .get(name)
       .acquire()
       .then(async (release) => {
-        console.log('name', name);
         try {
           await this.findScript(name);
+          // console.log('name wait', name);
         } catch (error) {
         } finally {
           release();
@@ -92,7 +92,6 @@ export class DynamicScriptLoaderService {
           resolve({ script: name, loaded: false, status: 'Loaded' });
         document.getElementsByTagName('head')[0].appendChild(script);
       } else {
-        console.log('already loaded', name);
         resolve({ script: name, loaded: true, status: 'Already Loaded' });
       }
     });

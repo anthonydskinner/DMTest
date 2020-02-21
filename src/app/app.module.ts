@@ -10,9 +10,10 @@ import { AboutComponent } from './pages/about/about.component';
 import { DynamicScriptLoaderService } from './services/dynamic-script-loader-service.service';
 import { PollForGlobalUtil } from './util/poll-for-global.service';
 import { WindowUtil } from './util/window.service';
+import { VideoComponent } from './components/video/video.component';
 
 @NgModule({
-  declarations: [AppComponent, ImageComponent, HomeComponent, AboutComponent],
+  declarations: [AppComponent, ImageComponent, HomeComponent, AboutComponent, VideoComponent],
   imports: [BrowserModule, AppRoutingModule],
   providers: [DynamicScriptLoaderService, PollForGlobalUtil, WindowUtil],
   bootstrap: [AppComponent]
