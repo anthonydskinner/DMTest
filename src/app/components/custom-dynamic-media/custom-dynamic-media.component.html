@@ -1,0 +1,19 @@
+<ng-container *ngIf="type === 'viewers'">
+  <div class="video-wrapper container">
+    <div class="holder">
+      <div 
+        id="{{ containerId }}" 
+        style="position: relative; height: 100%;">
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="type === 'image'">
+  <img 
+    class="dm-image" 
+    id="{{ containerId }}"
+    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
+    data-src="{{ path }}"
+    [attr.data-mode]="dataMode">
+</ng-container>

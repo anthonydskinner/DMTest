@@ -27,7 +27,7 @@ export class ImageComponent implements AfterViewInit, OnDestroy {
   }
 
   @Input() path: string;
-  @Input() imgId: string;
+  @Input() containerId: string;
   @Input() dataMode: string;
 
   ngAfterViewInit() {
@@ -62,6 +62,6 @@ export class ImageComponent implements AfterViewInit, OnDestroy {
   }
 
   callS7ResponsiveImage() {
-    this.window['s7responsiveImage'](document.getElementById(this.imgId));
+    this.window['s7responsiveImage'](document.getElementById(this.containerId));
   }
 }
