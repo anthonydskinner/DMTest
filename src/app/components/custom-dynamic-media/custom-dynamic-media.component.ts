@@ -56,8 +56,7 @@ export class CustomDynamicMediaComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.pollForGlobalSubscription.unsubscribe();
-    this.globalFnPollSubscription.unsubscribe();
+    this.unsubscribe();
   }
 
   scriptSelector() {
@@ -74,13 +73,21 @@ export class CustomDynamicMediaComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  unsubscribe() {
+    if (this.pollForGlobalSubscription) {
+      this.pollForGlobalSubscription.unsubscribe();
+    }
+    if (this.globalFnPollSubscription) {
+      this.globalFnPollSubscription.unsubscribe();
+    }
+  }
+
   onPollForGlobalResponse(val: any): void {
     if (val !== 'loaded') {
       this.loadScripts();
     } else if (val === 'loaded') {
       this.scriptSelector();
-      this.pollForGlobalSubscription.unsubscribe();
-      this.globalFnPollSubscription.unsubscribe();
+      this.unsubscribe();
     }
   }
 
